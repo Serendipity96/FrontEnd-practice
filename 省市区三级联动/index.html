@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>city</title>
+    <style>
+        .choose-area {
+            height: 50px;
+        }
+
+        select {
+            width: 100px;
+            height: 30px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="choose-area">您选择的是
+        <input type="text" id="content">
+    </div>
+    <select name="province" id="province" onchange="showProvince(this)">
+        <option value="请选择" selected>请选择</option>
+    </select>
+    <select name="city" id="city" onchange="showCity(this)">
+        <option value="请选择" selected>请选择</option>
+    </select>
+
+    <select name="county" id="county" onchange="showCounty(this)">
+        <option value="请选择" selected>请选择</option>
+    </select>
+    <button id="reset" onclick="reset(this)">重置</button>
+    <script>
+
+
+        {
+            var arr = [
+                {
+                    name: "北京市",
+                    city: [
+                        {
+                            name: "北京市",
+                            districtAndCounty: ["东城区", "西城区", "崇文区", "宣武区", "朝阳区", "丰台区", "石景山区", "海淀区", "门头沟区", "房山区", "通州区", "顺义区", "昌平区", "大兴区", "怀柔区", "平谷区", "密云县", "延庆县", "延庆镇"]
+                        }
+                    ]
+                },
+                {
+                    name: "河北省",
+                    city: [
+                        {
+                            name: "石家庄市",
+                            districtAndCounty: ["长安区", "桥东区", "桥西区", "新华区", "裕华区", "井陉矿区", "辛集市", "藁城市", "晋州市", "新乐市", "鹿泉市", "井陉县", "微水镇", "正定县", "正定镇", "栾城县", "栾城镇", "行唐县", "龙州镇", "灵寿县", "灵寿镇", "高邑县", "高邑镇", "深泽县", "深泽镇", "赞皇县", "赞皇镇", "无极县", "无极镇", "平山县", "平山镇", "元氏县", "槐阳镇", "赵县", "赵州镇"]
+                        },
+                        {
+                            name: "邯郸市",
+                            districtAndCounty: ["丛台区", "邯山区", "复兴区", "峰峰矿区", "武安市", "邯郸县", "南堡乡东小屯村", "临漳县", "临漳镇", "成安县", "成安镇", "大名县", "大名镇", "涉县", "涉城镇", "磁县", "磁州镇", "肥乡县", "肥乡镇", "永年县", "临洺关镇", "邱县", "新马头镇", "鸡泽县", "鸡泽镇", "广平县", "广平镇", "馆陶县", "馆陶镇", "魏县", "魏城镇", "曲周县", "曲周镇"]
+                        }
+                    ]
+                }
+            ]
+            var province = document.getElementById('province')
+            var city = document.getElementById('city')
+            var county = document.getElementById('county')
+            var input = document.getElementById('content')
+            var btn = document.getElementById('reset')
+
+
+var currentIndex = {
+    province:'',
+    city:'',
+    county:''
+}
+            for (let i = 0; i < arr.length; i++) {
+                let opt = document.createElement('option');
+                opt.innerText = arr[i].name;
+                opt.value = i;
+                province.appendChild(opt);
+            }
+        }
+
+        function showProvince(e) {
+            // 所选省份
+            let selected = e.options.selectedIndex;
+            
+            // 设置input
+            input.value = e.options[selected].innerText;
+            // 数组查值
+            let index = selected - 1;
+            currentIndex.province = index;
+
+            if (selected !== 0) {
+                city.length = 0;// 清零
+                let len = arr[index].city.length;
+                for (let i = 0; i < len; i++) {
+                    let opt = document.createElement('option');
+                    opt.innerText = arr[index]['city'][i].name;
+                    opt.value = i;
+                    city.appendChild(opt);
+                }
+            }
+        }
+
+        function showCity(e) {
+            // 所选城市
+            let selected = e.options.selectedIndex; //1
+            // 追加input
+            input.value = input.value + '-' + e.options[selected].innerText;
+            // 数组查值
+            currentIndex.city = selected;//1
+            if (selected !== 0) {
+                county.length = 0;// 清零
+                let len = arr[currentIndex.province]['city'][selected].districtAndCounty.length;
+                for (let i = 0; i < len; i++) {
+                    let opt = document.createElement('option');
+                    opt.innerText = arr[currentIndex.province]['city'][selected].districtAndCounty[i];
+                    opt.value = i;
+                    county.appendChild(opt);
+                }
+            }
+        }
+        function showCounty(e){
+            // 所选县城
+            let selected = e.options.selectedIndex; 
+
+            input.value = input.value + '-' + e.options[selected].innerText;
+        }
+        function reset(){
+            input.value = '';
+            city.length = 0;
+            county.length = 0;
+        }
+    </script>
+</body>
+
+</html>
